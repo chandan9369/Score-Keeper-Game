@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .winner {
+        color: green;
+      }
+
+      .loser {
+        color: rgb(255, 48, 48);
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <title>Score Keeper Game</title>
+  </head>
+  <body>
+    <section class="section is-family-monospace">
+      <div class="container">
+        <div class="columns">
+          <div class="column is-half is-offset-one-quarter">
+            <div class="card">
+              <div class="card-image">
+                <figure class="image is-2byl">
+                  <img
+                    src="https://media.istockphoto.com/photos/table-tennis-equipment-picture-id1192307192?b=1&k=20&m=1192307192&s=170667a&w=0&h=zPZsq3-ehwsxh2waz0c31cggWRYiBmChmVeJXefYDM4="
+                    alt="back"
+                  />
+                </figure>
+              </div>
+              <header class="card-header">
+                <p class="card-header-title">Ping Pong Score Keeper</p>
+              </header>
+              <div class="card-content">
+                <div class="content">
+                  <h1 class="is-tittle-1">
+                    <span id="player1">0</span> to <span id="player2">0</span>
+                  </h1>
+                  <p class="subtitle">Use the buttons below to keep score</p>
+                  <label for="Panel" class="label is-large is-inline"
+                    >Playing To</label
+                  >
+                  <div class="select is-rounded">
+                    <select name="Game Score" id="Panel">
+                      <option value="4" selected>4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <footer class="card-footer">
+                <button
+                  id="player1btn"
+                  class="is-primary button card-footer-item is-large"
+                >
+                  +1 Player One
+                </button>
+                <button
+                  id="player2btn"
+                  class="is-info button card-footer-item is-large"
+                >
+                  +1 Player Two
+                </button>
+                <button
+                  id="reset"
+                  class="is-danger button card-footer-item is-large"
+                >
+                  reset
+                </button>
+              </footer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script type="text/javascript">
+      const player1 = document.querySelector("#player1btn");
+      const player2 = document.querySelector("#player2btn");
+      const reset = document.querySelector("#reset");
+
+      const score1 = document.querySelector("#player1");
+      const score2 = document.querySelector("#player2");
+
+      const select = document.querySelector("#Panel");
+
+      var count1 = 0,
+        count2 = 0;
+
+      let play1 = false;
+      let play2 = true;
+
+      let isGameOver = false;
+      let winingScore = 5;
+
+      select.addEventListener("change", function () {
+        winingScore = parseInt(this.value);
+        resetFunc();
+      });
+
+      player1.addEventListener("click", function () {
+        if (play1 && !play2 && !isGameOver) {
+          count1 = Math.floor(Math.random() * winingScore + 1);
+          if (count1 === winingScore) {
+            isGameOver = true;
+            score1.classList.add("has-text-success");
+            score2.classList.add("has-text-danger");
+          }
+          score1.innerText = `${count1}`;
+          play1 = false;
+          player1.disabled = true;
+          play2 = true;
+          player2.disabled = false;
+        }
+        if (isGameOver) {
+          player1.disabled = true;
+          player2.disabled = true;
+        }
+      });
+
+      player2.addEventListener("click", function () {
+        if (!play1 && play2 && !isGameOver) {
+          count2 = Math.floor(Math.random() * winingScore + 1);
+          if (count2 === winingScore) {
+            isGameOver = true;
+            score2.classList.add("has-text-success");
+            score1.classList.add("has-text-danger");
+            player1.disabled = true;
+            player2.disabled = true;
+          }
+          score2.innerText = `${count2}`;
+          play1 = true;
+          player1.disabled = false;
+          play2 = false;
+          player2.disabled = true;
+        }
+        if (isGameOver) {
+          player1.disabled = true;
+          player2.disabled = true;
+        }
+      });
+
+      reset.addEventListener("click", resetFunc);
+
+      function resetFunc() {
+        count1 = 0;
+        count2 = 0;
+        isGameOver = false;
+        score1.innerText = `${count1}`;
+        score2.innerText = `${count2}`;
+        player1.disabled = false;
+        player2.disabled = false;
+        score1.classList.remove("has-text-success", "has-text-danger");
+        score2.classList.remove("has-text-success", "has-text-danger");
+      }
+    </script>
+  </body>
+</html>
